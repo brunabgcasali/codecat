@@ -1,7 +1,23 @@
 {
+  "name": "codeCat",
+  "displayName": "codeCat",
   "expo": {
     "name": "codeCat",
     "slug": "codeCat",
-    "version": "1.0.0"
+    "icon": "./assets/iconeApp.png",
+    "version": "1.0.0",
+    "plugins": [
+      [
+        "expo-custom-assets",
+        {
+          "assetsPaths": [
+            "./src/resources"
+          ]
+        }
+      ]
+    ],
+    "android": {
+      "package": "com.anonymous.codeCat"
+    }
   }
 }

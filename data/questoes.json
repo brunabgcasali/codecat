@@ -1,0 +1,36 @@
+{
+  "geografia": [
+    {
+      "pergunta": "Qual é a capital do Brasil?",
+      "alternativas": ["São Paulo", "Rio de Janeiro", "Brasília", "Salvador"],
+      "correta": 2
+    },
+    {
+      "pergunta": "Qual o maior continente do mundo?",
+      "alternativas": ["África", "América", "Ásia", "Europa"],
+      "correta": 2
+    },
+    {
+      "pergunta": "Em qual país fica a Torre Eiffel?",
+      "alternativas": ["Itália", "França", "Inglaterra", "Alemanha"],
+      "correta": 1
+    }
+  ],
+  "matematica": [
+    {
+      "pergunta": "Quanto é 2 + 2?",
+      "alternativas": ["3", "4", "5", "6"],
+      "correta": 1
+    },
+    {
+      "pergunta": "Qual é a raiz quadrada de 16?",
+      "alternativas": ["2", "4", "8", "16"],
+      "correta": 1
+    },
+    {
+      "pergunta": "Quanto é 10 ÷ 2?",
+      "alternativas": ["2", "4", "5", "10"],
+      "correta": 2
+    }
+  ]
+}
