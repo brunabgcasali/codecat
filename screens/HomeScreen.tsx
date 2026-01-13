@@ -25,14 +25,11 @@ const HomeScreen = () => {
   const [tarefas, setTarefas] = useState<any[]>([]);
   const temas = ['geografia', 'matematica'];
 
-  // Carregar tarefas da API
   useEffect(() => {
     const fetchTarefas = async () => {
       try {
-        const response = await api.get('/tarefas'); // rota do seu backend
-        console.log('Resposta da API:', response.data); // 👈 ADICIONADO AQUI
+        const response = await api.get('/tarefas');
         setTarefas(response.data);
-
       } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
       }
@@ -46,56 +43,60 @@ const HomeScreen = () => {
       style={[
         styles.root,
         {
-          paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+          paddingTop:
+            Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         },
       ]}
     >
       <StatusBar translucent backgroundColor="#E9E9E9" barStyle="dark-content" />
 
-      <View style={[styles.bar]}>
-      <View style={styles.leftGroup}>
+      {/* ===== TOPO ===== */}
+      <View style={styles.headerContainer}>
+        {/* PERFIL */}
         <Image
           source={require('../assets/iconePerfil.png')}
-          style={{ width: 80, height: 80 }} // coloque sua imagem local ou use uma URL
+          style={styles.profileIcon}
           resizeMode="contain"
         />
-        </View>
-        </View>
-        <Text style={styles.text}>5</Text>
 
-      <View style={styles.rightGroup}>
-      <View style={styles.statsContainer}>
-
-        <Image
-          source={require('../assets/iconeGatinho.png')}
-          style={{ width: 30, height: 30 }} // coloque sua imagem local ou use uma URL
-          resizeMode="contain"
-        />
-        <Text style={styles.text}>7</Text>
-      </View>
-      <View style={styles.statsContainer}>
-        <Image
-          source={require('../assets/iconePatinha.png')}
-          style={{ width: 30, height: 30 }} // coloque sua imagem local ou use uma URL
-          resizeMode="contain"
-        />
-        
-        <Text style={styles.text}>700</Text>
-
-        <Image
-          source={require('../assets/iconeXp.png')}
-          style={{ width: 30, height: 30 }} // coloque sua imagem local ou use uma URL
-          resizeMode="contain"
-        />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-
+        {/* ESTATÍSTICAS */}
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
             <Image
-        source={require('../assets/Gatinho.png')}
-        style={{ width: 150, height: 100 }} 
-        resizeMode="contain"
-      />
+              source={require('../assets/iconeGato.png')}
+              style={styles.statIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.statText}>7</Text>
+          </View>
+
+          <View style={styles.statItem}>
+            <Image
+              source={require('../assets/iconePatinha.png')}
+              style={styles.statIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.statText}>700</Text>
+          </View>
+
+          <View style={styles.statItem}>
+            <Image
+              source={require('../assets/iconeXp.png')}
+              style={styles.statIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.statText}>1200</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* ===== CONTEÚDO ===== */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Image
+          source={require('../assets/Gatinho.png')}
+          style={{ width: 150, height: 100, alignSelf: 'center' }}
+          resizeMode="contain"
+        />
 
         <View style={styles.zigzagContainer}>
           {tarefas.map((tarefa, index) => (
@@ -104,7 +105,8 @@ const HomeScreen = () => {
               style={[
                 styles.circle,
                 {
-                  alignSelf: index % 2 === 0 ? 'flex-start' : 'flex-end',
+                  alignSelf:
+                    index % 2 === 0 ? 'flex-start' : 'flex-end',
                   marginLeft: index % 2 === 0 ? 100 : 0,
                   marginRight: index % 2 === 0 ? 0 : 100,
                 },
@@ -112,7 +114,7 @@ const HomeScreen = () => {
               onPress={() =>
                 navigation.navigate('Tarefa', {
                   tema: temas[index % temas.length],
-                  tarefaId: tarefa._id, // envia o ID real
+                  tarefaId: tarefa._id,
                 })
               }
             >
@@ -124,17 +126,9 @@ const HomeScreen = () => {
         </View>
       </ScrollView>
 
-          <View style={[styles.bar, { paddingBottom: 10 }]}>
-      <Text style={styles.barText}>Rodapé</Text>
-      <Image
-        source={require('../assets/Gatinho.png')}
-        style={{ width: 150, height: 100 }} 
-        resizeMode="contain"
-      />
-    </View>
-
-      <View style={[styles.bar, { paddingBottom: 10 }]}>
-        <Text style={styles.barText}>Rodapé</Text>
+      {/* ===== RODAPÉ ===== */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Rodapé</Text>
       </View>
     </View>
   );
@@ -142,36 +136,63 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-// ESTILOS
+// ===== ESTILOS =====
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: '#D9D9D9',
   },
-  bar: {
-    backgroundColor: '#E9E9E9',
-    padding: 15,
+
+  /* TOPO */
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: '#E9E9E9',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
 
-  text: {
-    fontSize: 18,
+  profileIcon: {
+    width: 60,
+    height: 60,
   },
 
-  barText: {
-    fontSize: 18,
+  statsRow: {
+    flexDirection: 'row',
+    gap: 14,
+    alignItems: 'center',
+  },
+
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+
+  statIcon: {
+    width: 28,
+    height: 28,
+  },
+
+  statText: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
+
+  /* CONTEÚDO */
   scrollContent: {
     paddingVertical: 20,
     paddingHorizontal: 10,
   },
+
   zigzagContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
   },
+
   circle: {
     width: 80,
     height: 80,
@@ -182,9 +203,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
   },
+
   circleText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  /* RODAPÉ */
+  footer: {
+    backgroundColor: '#E9E9E9',
+    padding: 15,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+
+  footerText: {
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

@@ -22,6 +22,7 @@ export type RootTabParamList = {
 export type RootStackParamList = {
   Tabs: undefined;
   Home: undefined;
+  EditarPerfil: undefined;
   Tarefa: {
     tema: string;
     tarefaId: string;
@@ -31,4 +32,3 @@ export type RootStackParamList = {
     acertos: number;
   };
 };
-
