@@ -14,7 +14,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../src/types';
 import api from '../src/api';
 
-// Tipagem do navigation para HomeScreen
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Tabs'
@@ -29,9 +28,10 @@ const HomeScreen = () => {
     const fetchTarefas = async () => {
       try {
         const response = await api.get('/tarefas');
-        setTarefas(response.data);
+        setTarefas(response.data || []);
       } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
+        setTarefas([]);
       }
     };
 
@@ -52,20 +52,17 @@ const HomeScreen = () => {
 
       {/* ===== TOPO ===== */}
       <View style={styles.headerContainer}>
-        {/* PERFIL */}
         <Image
           source={require('../assets/iconePerfil.png')}
           style={styles.profileIcon}
           resizeMode="contain"
         />
 
-        {/* ESTATÍSTICAS */}
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
             <Image
               source={require('../assets/iconeGato.png')}
               style={styles.statIcon}
-              resizeMode="contain"
             />
             <Text style={styles.statText}>7</Text>
           </View>
@@ -74,7 +71,6 @@ const HomeScreen = () => {
             <Image
               source={require('../assets/iconePatinha.png')}
               style={styles.statIcon}
-              resizeMode="contain"
             />
             <Text style={styles.statText}>700</Text>
           </View>
@@ -83,7 +79,6 @@ const HomeScreen = () => {
             <Image
               source={require('../assets/iconeXp.png')}
               style={styles.statIcon}
-              resizeMode="contain"
             />
             <Text style={styles.statText}>1200</Text>
           </View>
@@ -98,32 +93,51 @@ const HomeScreen = () => {
           resizeMode="contain"
         />
 
-        <View style={styles.zigzagContainer}>
-          {tarefas.map((tarefa, index) => (
-            <TouchableOpacity
-              key={tarefa._id}
-              style={[
-                styles.circle,
-                {
-                  alignSelf:
-                    index % 2 === 0 ? 'flex-start' : 'flex-end',
-                  marginLeft: index % 2 === 0 ? 100 : 0,
-                  marginRight: index % 2 === 0 ? 0 : 100,
-                },
-              ]}
-              onPress={() =>
-                navigation.navigate('Tarefa', {
-                  tema: temas[index % temas.length],
-                  tarefaId: tarefa._id,
-                })
-              }
-            >
-              <Text style={styles.circleText}>
-                {tarefa.titulo || `Tarefa ${index + 1}`}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {/* 👉 CASO NÃO HAJA TAREFAS */}
+        {tarefas.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              Não há tarefas disponíveis 🐾
+            </Text>
+          </View>
+        ) : (
+          /* 👉 CASO HAJA TAREFAS */
+          <View style={styles.zigzagContainer}>
+            {tarefas.map((tarefa, index) => {
+              const isLeft = index % 2 === 0;
+
+              return (
+                <TouchableOpacity
+                  key={tarefa._id}
+                  style={[
+                    styles.patinhaWrapper,
+                    {
+                      alignSelf: isLeft ? 'flex-start' : 'flex-end',
+                      marginLeft: isLeft ? 40 : 0,
+                      marginRight: isLeft ? 0 : 40,
+                    },
+                  ]}
+                  onPress={() =>
+                    navigation.navigate('Tarefa', {
+                      tema: temas[index % temas.length],
+                      tarefaId: tarefa._id,
+                    })
+                  }
+                >
+                  <Image
+                    source={require('../assets/patinha.png')}
+                    style={styles.patinha}
+                    resizeMode="contain"
+                  />
+
+                  <Text style={styles.patinhaText}>
+                    {tarefa.titulo || `Tarefa ${index + 1}`}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
 
       {/* ===== RODAPÉ ===== */}
@@ -143,7 +157,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
   },
 
-  /* TOPO */
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -182,7 +195,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  /* CONTEÚDO */
   scrollContent: {
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -190,28 +202,37 @@ const styles = StyleSheet.create({
 
   zigzagContainer: {
     flexDirection: 'column',
-    justifyContent: 'center',
   },
 
-  circle: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    backgroundColor: '#4226bdff',
-    marginVertical: 20,
-    justifyContent: 'center',
+  patinhaWrapper: {
+    marginVertical: 30,
     alignItems: 'center',
-    elevation: 5,
   },
 
-  circleText: {
-    color: '#fff',
-    fontSize: 16,
+  patinha: {
+    width: 90,
+    height: 90,
+  },
+
+  patinhaText: {
+    marginTop: 6,
+    fontSize: 14,
     fontWeight: 'bold',
+    color: '#4226bdff',
     textAlign: 'center',
   },
 
-  /* RODAPÉ */
+  emptyContainer: {
+    marginTop: 60,
+    alignItems: 'center',
+  },
+
+  emptyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#555',
+  },
+
   footer: {
     backgroundColor: '#E9E9E9',
     padding: 15,
